@@ -34,3 +34,6 @@ Thumbs.db
 
 # Data (optional - comment out if you want to commit the CSV)
 data/*.csv
+
+# Old requirements file
+requirement.txt
