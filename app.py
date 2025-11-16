@@ -2,7 +2,7 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-import joblib
+import pickle
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.tree import DecisionTreeClassifier
@@ -101,7 +101,8 @@ def train_model(model_name="Random Forest", test_size_pct=25, rs=42):
 pretrained = MODEL_DIR / "model_rf.pkl"
 if pretrained.exists():
     try:
-        loaded = joblib.load(pretrained)
+        with open(pretrained, 'rb') as f:
+            loaded = pickle.load(f)
         st.sidebar.success(f"Loaded pretrained model: {pretrained.name}")
     except Exception:
         loaded = None
@@ -111,7 +112,8 @@ else:
 if retrain or (loaded is None):
     with st.spinner("Training the model..."):
         model, metrics, test_data = train_model(model_choice, test_size, random_state)
-        joblib.dump(model, MODEL_DIR / "model_trained.pkl")
+        with open(MODEL_DIR / "model_trained.pkl", 'wb') as f:
+            pickle.dump(model, f)
         st.success("Trained and saved model to model/model_trained.pkl")
 else:
     model = loaded
